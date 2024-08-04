@@ -1,16 +1,28 @@
 import logo from './logo.svg';
 import './App.css';
-import Registration from './Pages/Registration';
-import Login from './Pages/Login';
+import NavBar from './Components/navBar';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './Pages/Home';
+import Detailes from './Pages/Productdetailes';
+import NotFound from './Pages/NotFound';
+
 function App() {
   return (
-    <div className="App">
+    <>
+      <BrowserRouter>
+        <NavBar />
+        <Routes>
+          <Route path='/' exact element={<Home />} />
+
+          <Route path='/productdetails/:id' exact element={<Detailes />} />
+
+          <Route path={"*"} element={<NotFound />} exact />
+        </Routes>
+      </BrowserRouter>
+
+    </>
 
 
-      <Registration />
-      <Login/>
-      
-    </div>
   );
 }
 
