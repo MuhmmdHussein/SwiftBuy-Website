@@ -36,7 +36,7 @@ function ListProduct() {
 
   return (
     <div>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap justify-center">
         {currentPageItems.map((product) => (
           <Product {...product} key={product.id} />
         ))}
