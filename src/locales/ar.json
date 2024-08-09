@@ -1,0 +1,26 @@
+{
+  "title": "{{title}} أسم المنتج",
+  "description": "وصف المنتج",
+  "price": "السعر: ${{price}}",
+  "onlyLeft": "فقط {{amount}} متبقي في المخزن",
+  "addToCart": "أضف إلى السلة",
+  "Home": "الصفحه الرئيسية",
+  "Faivorites": "العناصر المفضلة",
+  "Admin Dashboard": "صفحة المسؤل",
+  "Add": "أضافة منتج جديد",
+  "Update": "تعديل منتج",
+  "Delete": "حذف منتج",
+  "Get": "عرض منتج",
+  "product_title" : " أسم المنتج",
+  "product_price" : " سعر المنتج",
+  "product_description" : " وصف المنتج ",
+  "product_category" : " الرقم التصنيفي",
+  "product_image" : " عنوان الصورة ",
+  "add_product" : " أضف المنتج ",
+  "product_detailes" : " تفاصيل المنتج ",
+  "update_title" : " تعديل اﻷسم ",
+  "update_price" : " تعديل السعر ",
+  "update_image" : " تعديل الصورة ",
+  "like" : " المنتج المفضل لديك "
+
+}

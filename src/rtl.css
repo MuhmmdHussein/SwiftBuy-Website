@@ -1,0 +1,13 @@
+body[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+  
+  body[dir="rtl"] .flex {
+    flex-direction: row-reverse;
+  }
+  
+  body[dir="rtl"] .absolute {
+    right: auto;
+    left: 0;
+  }

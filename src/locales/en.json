@@ -1,0 +1,28 @@
+{
+  "title": "{{title}}",
+  "onlyLeft": "Only {{amount}} left",
+  "price": "${{price}}",
+  "addToCart": "Add to Cart",
+  "Home": "Home",
+  "Faivorites": "Favorites",
+  "Admin Dashboard" : "Admin Dashboard",
+  "Add":"Add New Product",
+  "Update" :"Update Product",
+  "Delete" : "Delete Product",
+  "Get": "Get Product",
+  "product_title" : "Title :",
+  "product_price" : "Price :",
+  "product_description" : "Description :",
+  "product_category" : "Category Id :",
+  "product_image" : "Image Url :",
+  "add_product" : "Add Product",
+  "product_detailes" : "Product Detailes",
+  "update_title" : "Update Title :",
+  "update_price" : "Update Price :",
+  "update_image" : "Update Image :",
+  "like" : "Your Liked Products"
+  
+
+  
+
+}
