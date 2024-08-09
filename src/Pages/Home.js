@@ -3,6 +3,11 @@ import Carousel from "../Components/Curosel";
 import ListProduct from "./ListProduct";
 
 function Home (){
+
+
+
+
+
     return (
         <div className="w-full flex flex-col">
             <div>
