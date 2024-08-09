@@ -120,6 +120,11 @@ function ListProduct() {
             <p>No products found for the selected filters.</p>
           </div>
         )}
+    <div>
+      <div className="flex flex-wrap justify-center">
+        {currentPageItems.map((product) => (
+          <Product {...product} key={product.id} />
+        ))}
       </div>
 
       {/* Filter Section */}
