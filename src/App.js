@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from './redux/store'; // Adjust the path according to your directory structure
+import store from './store/Store/Store'; 
 import NavBar from './Components/navBar';
 import Home from './Pages/Home';
 import Detailes from './Pages/Productdetailes';

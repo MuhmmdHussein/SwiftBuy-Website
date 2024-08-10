@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateQuantity } from '../redux/cartActions';
+import { removeFromCart, updateQuantity } from '../store/Actions/cartActions';
 
 const taxes = 0.14;
 
@@ -8,12 +8,10 @@ const Cart = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [itemToRemove, setItemToRemove] = useState();
 
-  const cartItems = useSelector(state => state.items);
+  const cartItems = useSelector(state => state.Cart.items) || [];
   const dispatch = useDispatch();
 
-  // Handle removing an item from the cart
-
-  
+  //  removing an item from the cart
   const handleRemoveFromCart = (id) => {
     setItemToRemove(id);
     setShowConfirm(true);
@@ -30,8 +28,7 @@ const Cart = () => {
     setItemToRemove();
   };
 
-  // Handle updating the quantity of an item
-
+  //  updating the quantity of an item
   const handleUpdateQuantity = (id, increment) => {
     const item = cartItems.find(item => item.id === id);
     const newQuantity = item.quantity + increment;

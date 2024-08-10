@@ -6,6 +6,3 @@ export function toggleFavorite(product) {
     payload: product,
   };
 }
-
-
-

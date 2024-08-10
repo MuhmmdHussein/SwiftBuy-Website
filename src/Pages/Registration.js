@@ -1,8 +1,11 @@
-import {useState} from "react";
+import { queryAllByText } from "@testing-library/react";
+import {useRef, useState,navigate} from "react";
 import React from "react";
+import { useNavigate } from 'react-router-dom'
+import { Link  } from "react-router-dom";
 
 function Registration() {
-
+  const navigate = useNavigate(); 
      const [userData, setUserData] = useState({
         Name: "",
         uEmail: "",
@@ -122,6 +125,32 @@ confirmPasswordErr : e.target.value != userData.uPassword1 ?  "Passwords do not 
       };
 
 
+// =====================================================
+
+
+
+function handleSignUp(e) {
+  e.preventDefault();
+
+  if (errors.nameErr || errors.emailErr || errors.userNameErr || errors.passwordErr || errors.confirmPasswordErr) {
+    return;
+
+
+
+
+  }
+
+
+
+
+  localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("userName", userData.uName);
+  localStorage.setItem("userEmail", userData.uEmail);
+  localStorage.setItem("userPassword", userData.uPassword1);
+
+    
+  navigate("/Login");
+}
 
 
 
@@ -140,7 +169,8 @@ confirmPasswordErr : e.target.value != userData.uPassword1 ?  "Passwords do not 
 
 
 
-  return (
+
+  return(
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
         <form>
@@ -311,16 +341,19 @@ confirmPasswordErr : e.target.value != userData.uPassword1 ?  "Passwords do not 
           <div className="!mt-8">
             <button
               type="button"
+              onClick={handleSignUp}
+
               className="w-full py-2.5 px-4 text-sm tracking-wider font-semibold rounded-md bg-blue-600 hover:bg-blue-700 text-white focus:outline-none"
             >
               Create Account
+
             </button>
           </div>
           <p className="text-gray-800 text-sm mt-6 text-center">
             Already have an account?{" "}
-            <a href="javascript:void(0);" className="text-blue-600 font-semibold hover:underline ml-1">
-              Login here
-            </a>
+            <Link to="/Login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+          Sign In
+        </Link>
           </p>
         </form>
       </div>

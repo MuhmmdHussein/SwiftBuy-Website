@@ -8,10 +8,10 @@ import "../index.css"
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
-    <div className="w-screen h-80  bg-red-500"><img  className="w-full h-95% object-cover pb-20" src={scrol1}   /></div>,
-    <div className="w-screen h-80  bg-blue-500"><img  className="w-full h-95% object-cover pb-20" src={scrol2} /></div>,
-    <div className="w-screen h-80  bg-green-500"><img  className="w-full h-95% object-cover pb-20" src={scrol3} /></div>,
-    <div className="w-screen h-80  bg-red-500"><img  className="w-full h-95% object-cover pb-20" src={scrol4}   /></div>,
+    <div className="w-screen h-80  bg-500"><img  className="w-full h-95% object-cover pb-20" src={scrol1}   /></div>,
+    <div className="w-screen h-80  bg-500"><img  className="w-full h-95% object-cover pb-20" src={scrol2} /></div>,
+    <div className="w-screen h-80  bg-500"><img  className="w-full h-95% object-cover pb-20" src={scrol3} /></div>,
+    <div className="w-screen h-80  bg-500"><img  className="w-full h-95% object-cover pb-20" src={scrol4}   /></div>,
 
   ];
 
