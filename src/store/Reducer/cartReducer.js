@@ -36,11 +36,18 @@ const cartReducer = (state = initialState, action) => {
                 item.id === newItemUpdate.id
                     ? { ...item, quantity: newItemUpdate.quantity }
                     : item
-            ).filter(item => item.quantity > 0);  
+            ).filter(item => item.quantity > 0);  // Remove items with zero quantity
             return {
                 ...state,
                 items: updatedQuantityItems,
                 itemCount: updatedQuantityItems.reduce((count, item) => count + item.quantity, 0)
+            };
+
+        case 'CLEAR_CART':
+            return {
+                ...state,
+                items: [],
+                itemCount: 0  // Ensure itemCount is also reset
             };
 
         default:

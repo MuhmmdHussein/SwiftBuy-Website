@@ -1,15 +1,10 @@
-import React from "react";
-import { useState } from 'react';
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Link  } from "react-router-dom";
-
-
-
+import { Link } from "react-router-dom";
 
 function Login() {
-  
-
   const navigate = useNavigate(); 
+
   const [userData, setUserData] = useState({
     uEmail: "",
     uPassword: ""
@@ -20,10 +15,7 @@ function Login() {
     passErr: ""
   });
 
-
-
   const ChangeUserData = (e) => {
-    
     setUserData({
       ...userData,
       [e.target.name]: e.target.value
@@ -48,60 +40,50 @@ function Login() {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  // const navigate = useNavigate();
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   navigate("/");  };
-
-// ========================================================
-
-
-const handleSubmit = (e) => {
-  e.preventDefault();
-
-  const storedEmail = localStorage.getItem('userEmail');
-  const storedPassword = localStorage.getItem('userPassword');
-
-  
-  if (storedEmail === userData.uEmail && storedPassword === userData.uPassword) {
-    setErrors({
-      emailErr: "",
-      passErr: ""
-    });
-
-    // Check if the person is an admin or user
-
-
-    if ((userData.uEmail === 'admin@111' || userData.uEmail === 'admin@222') && userData.uPassword === 'Admin@111') {
-      localStorage.setItem('userRole', 'admin');
-    } else {
-      localStorage.setItem('userRole', 'user');
+    // Check for empty fields
+    if (!userData.uEmail || !userData.uPassword) {
+      setErrors({
+        emailErr: userData.uEmail ? errors.emailErr : "Email is required",
+        passErr: userData.uPassword ? errors.passErr : "Password is required"
+      });
+      return;
     }
 
-    // Navigate to Admin page if userRole is admin
+    const storedEmail = localStorage.getItem('userEmail');
+    const storedPassword = localStorage.getItem('userPassword');
 
+    if (storedEmail === userData.uEmail && storedPassword === userData.uPassword) {
+      setErrors({
+        emailErr: "",
+        passErr: ""
+      });
 
-    if (localStorage.getItem('userRole') === 'admin') {
-      navigate("/Admin/:id");
+      // Check if the person is an admin or user
+      if ((userData.uEmail === 'admin1@swifbuy.com' || userData.uEmail === 'admin2@swifbuy.com') && userData.uPassword === 'Admin@111') {
+        localStorage.setItem('userRole', 'admin');
+      } else {
+        localStorage.setItem('userRole', 'user');
+      }
+      // Navigate to Admin page if userRole is admin
+      if (localStorage.getItem('userRole') === 'admin') {
+        navigate("/Admin/:id");
+      } else {
+        navigate("/");
+      }
+
+      // Store login status in localStorage
+      localStorage.setItem('isLoggedIn', 'true');
     } else {
-      navigate("/");
+      setErrors({
+        emailErr: "Invalid email or password",
+        passErr: ""
+      });
     }
+  };
 
-    // Store login status in localStorage
-    localStorage.setItem('isLoggedIn', 'true');
-
-  } else {
-    setErrors({
-      emailErr: "Invalid email or password",
-      passErr: ""
-    });
-  }
-};
-
-
-
-  
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -112,7 +94,7 @@ const handleSubmit = (e) => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" >
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                   Your email
@@ -127,6 +109,7 @@ const handleSubmit = (e) => {
                   value={userData.uEmail}
                   onChange={ChangeUserData}
                 />
+                {errors.emailErr && <p className="text-sm text-red-600">{errors.emailErr}</p>}
               </div>
               <div>
                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -142,11 +125,11 @@ const handleSubmit = (e) => {
                   value={userData.uPassword}
                   onChange={ChangeUserData}
                 />
+                {errors.passErr && <p className="text-sm text-red-600">{errors.passErr}</p>}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
-                   
                   </div>
                   <div className="ml-3 text-sm">
                   </div>
@@ -154,27 +137,24 @@ const handleSubmit = (e) => {
               </div>
 
               <button
-      type="button"
-      className="w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-4 py-2 text-center dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      onClick={handleSubmit}
-    >
+                type="submit"
+                className="w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-4 py-2 text-center dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Sign in
+              </button>
 
-Sign in    </button>
-
-
-<p className="text-sm font-light text-gray-500 dark:text-gray-400">
-        Don’t have an account yet' '
-        <Link to="/Registration" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-          Sign up
-        </Link>
-      </p>
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                Don’t have an account yet?{' '}
+                <Link to="/Registration" className="font-medium text-primary-600 hover:underline dark:text-primary-900">
+                  Sign up
+                </Link>
+              </p>
             </form>
           </div>
         </div>
       </div>
     </section>
-    
   );
-};
+}
 
 export default Login;

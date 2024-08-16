@@ -21,7 +21,8 @@ export function Fivorites() {
               <Product
                 title={favorite.title}
                 id={favorite.id}
-                images={[favorite.images[0].replace(/[\[\]""]/g, '')]}
+                //images={[favorite.images[0].replace(/[\[\]""]/g, '')]}
+                image={favorite.image}
                 price={favorite.price}
                 isFavorite={true}
               />

@@ -1,51 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import scrol1 from "../assets/lastday.webp"
-import scrol2 from "../assets/image110.png"
-import scrol3 from "../assets/selas.jpg"
-import scrol4 from "../assets/seals2.jpeg"
-import "../index.css"
+import scrol1 from '../assets/1.jpg';
+import scrol2 from '../assets/2.png';
+import '../index.css';
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [
-    <div className="w-screen h-80  bg-500"><img  className="w-full h-95% object-cover pb-20" src={scrol1}   /></div>,
-    <div className="w-screen h-80  bg-500"><img  className="w-full h-95% object-cover pb-20" src={scrol2} /></div>,
-    <div className="w-screen h-80  bg-500"><img  className="w-full h-95% object-cover pb-20" src={scrol3} /></div>,
-    <div className="w-screen h-80  bg-500"><img  className="w-full h-95% object-cover pb-20" src={scrol4}   /></div>,
 
+  // Define slides with each image as a separate slide
+  const slides = [
+    <div key={0} className="carousel-slide">
+      <img className="carousel-image" src={scrol1} alt="Slide 1" />
+    </div>,
+    <div key={1} className="carousel-slide">
+      <img className="carousel-image" src={scrol2} alt="Slide 2" />
+    </div>,
+    // Add more slides as needed
   ];
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentSlide((currentSlide + 1) % slides.length);
-    }, 4000); 
-    return () => clearInterval(intervalId);
-  }, [currentSlide, slides.length]);
-
   const handlePrev = () => {
-    setCurrentSlide((currentSlide - 1 + slides.length) % slides.length);
+    setCurrentSlide(prevSlide => (prevSlide === 0 ? slides.length - 1 : prevSlide - 1));
   };
 
   const handleNext = () => {
-    setCurrentSlide((currentSlide + 1) % slides.length);
+    setCurrentSlide(prevSlide => (prevSlide === slides.length - 1 ? 0 : prevSlide + 1));
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 3000); 
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, []);
+
   return (
-    <div className="relative overflow-x-hidden carousel scrollbar-hide">
-      {/* Carousel slides */}
+    <div className="relative carousel-container">
+      {/* Carousel Slides */}
       <div
-        className="flex scroll-snap-type x mandatory scroll-snap-align end transition-all duration-500"
-        style={{
-          transform: `translateX(-${currentSlide * 100}vw)`,
-        }}
+        className="flex transition-transform duration-500 ease-in-out"
+        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
-        {slides.map((slide, index) => (
-          <div key={index} className="w-screen h-1/2 flex-shrink-0">
-            {slide}
-          </div>
-        ))}
+        {slides}
       </div>
-     
+
+      {/* Navigation Buttons */}
+      <button
+        onClick={handlePrev}
+        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-4 rounded-full shadow-lg"
+      >
+        &lt;
+      </button>
+      <button
+        onClick={handleNext}
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-4 rounded-full shadow-lg"
+      >
+        &gt;
+      </button>
     </div>
   );
 };

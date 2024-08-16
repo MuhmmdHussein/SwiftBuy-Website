@@ -11,4 +11,9 @@ export const removeFromCart = (id) => ({
 export const updateQuantity = (id, quantity) => ({
     type: 'UPDATE_QUANTITY',
     payload: { id, quantity }
+
+ 
 });
+export const clearCart = () => ({
+    type: 'CLEAR_CART'
+  });

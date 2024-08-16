@@ -20,7 +20,28 @@
   "update_title" : "Update Title :",
   "update_price" : "Update Price :",
   "update_image" : "Update Image :",
-  "like" : "Your Liked Products"
+  "like" : "Your Liked Products",
+  "cart" : "Your Shopping Cart",
+  "empty": "Your Cart is empty",
+  "remove" : "Remove from Cart",
+  "quantity" : "Quantity :",
+  "total" : "Total :",
+  "order" : "Order Summary",
+  "conf_delet" : "Confirm Delete",
+  "massge" : "Are you sure you want to remove this item from your cart ?",
+  "cancel" : "Cancel",
+  "tax" : "Tax :",
+  "registration" : "Registration",
+  "login" : "Login",
+  "logout" : "Logout",
+  "out_of_stock" : "Out of Stock",
+  "no_more_product" : "Thier's no any amount of this product in store come back later !!",
+  "added_successfully" : "Product add Successfully "
+
+
+  
+
+
   
 
   

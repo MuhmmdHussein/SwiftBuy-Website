@@ -3,20 +3,58 @@ import Product from '../Components/ProductItem';
 import axios from 'axios';
 
 function ListProduct() {
-  const [productData, setProduct] = useState([]);
+  const [productData, setProductData] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(9);
+  const [itemsPerPage] = useState(9);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // States for filters
+  const [title, setTitle] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [category, setCategory] = useState('');
 
   useEffect(() => {
     axios
-      .get('https://api.escuelajs.co/api/v1/products')
+      .get('https://fakestoreapi.com/products')
       .then((res) => {
-        setProduct(res.data);
+        setProductData(res.data);
+        setFilteredProducts(res.data);
+        setLoading(false);
       })
-      .catch((err) => console.error('Error fetching products:', err));
+      .catch((err) => {
+        setError('Failed to load products');
+        setLoading(false);
+      });
   }, []);
 
-  const totalPages = Math.ceil(productData.length / itemsPerPage);
+  useEffect(() => {
+    let filtered = productData;
+
+    if (title) {
+      filtered = filtered.filter((product) =>
+        product.title.toLowerCase().includes(title.toLowerCase())
+      );
+    }
+
+    if (minPrice) {
+      filtered = filtered.filter((product) => product.price >= parseFloat(minPrice));
+    }
+
+    if (maxPrice) {
+      filtered = filtered.filter((product) => product.price <= parseFloat(maxPrice));
+    }
+
+    if (category) {
+      filtered = filtered.filter((product) => product.category === category);
+    }
+
+    setFilteredProducts(filtered);
+  }, [title, minPrice, maxPrice, category, productData]);
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -32,47 +70,17 @@ function ListProduct() {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentPageItems = productData.slice(startIndex, endIndex);
+  const currentPageItems = filteredProducts.slice(startIndex, endIndex);
 
-  // ===================== States for filters ===========================
-  const [title, setTitle] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [category, setCategory] = useState('');
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    // Fetch products with filters
-    let url = 'https://api.escuelajs.co/api/v1/products?';
-    if (title) url += `title=${title}&`;
-    if (minPrice) url += `price_min=${minPrice}&`;
-    if (maxPrice) url += `price_max=${maxPrice}&`;
-    if (category) url += `categoryId=${category}&`;
-
-    axios
-      .get(url)
-      .then((res) => {
-        setProduct(res.data);
-      })
-      .catch((err) => console.error('Error fetching products with filters:', err));
-  }, [title, minPrice, maxPrice, category]);
-
-  useEffect(() => {
-    // Fetch categories for the dropdown
-    axios
-      .get('https://api.escuelajs.co/api/v1/categories')
-      .then((res) => {
-        setCategories(res.data);
-      })
-      .catch((err) => console.error('Error fetching categories:', err));
-  }, []);
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="flex flex-col lg:flex-row">
       {/* Filter Section */}
       <div className="w-full lg:w-80 p-4 bg-gray-100 lg:bg-transparent lg:border-l lg:border-gray-200 lg:shadow-md lg:rounded-lg lg:ml-4 mb-4 lg:mb-0">
         <div className="bg-white shadow-md rounded-lg p-4">
-          <h2 className="text-xl font-semibold mb-4">Find Your Product</h2>
+          <h2 className="text-xl font-semibold mb-4">Search</h2>
           <div className="mb-2">
             <label className="block text-sm mb-1">Search:</label>
             <input
@@ -108,18 +116,17 @@ function ListProduct() {
               className="w-full border border-gray-300 rounded px-2 py-1"
             >
               <option value="">Select a category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
+              <option value="men's clothing">Men's Clothing</option>
+              <option value="women's clothing">Women's Clothing</option>
+              <option value="jewelery">Jewelry</option>
+              <option value="electronics">Electronics</option>
             </select>
           </div>
         </div>
       </div>
 
       {/* Product List */}
-      <div className="flex-1 p-4 lg:pr-4 lg:w-3/4">
+      <div className="flex-1 p-4 lg:pr-4 lg:w-3/4 ">
         {currentPageItems.length > 0 ? (
           <>
             <div className="flex flex-wrap mb-4">

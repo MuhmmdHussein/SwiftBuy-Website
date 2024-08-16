@@ -14,23 +14,24 @@ function AdminDashboard() {
     const [updatedProduct, setUpdatedProduct] = useState({
         title: '',
         price: 0,
-        images: []
+        image: ''
     });
     const [newProduct, setNewProduct] = useState({
         title: '',
         price: 0,
         description: '',
-        categoryId: 1,
-        images: []
+        category:'' ,
+        image: ''
     });
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [showGetForm, setShowGetForm] = useState(false);
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [showDeleteForm, setShowDeleteForm] = useState(false);
+    const [showAlert,setShowAlert] = useState(false);
     const [confirmDelet, setConfirmDelet] = useState(false);
 
     const handleGetProduct = () => {
-        axios.get(`https://api.escuelajs.co/api/v1/products/${productId}`)
+        axios.get(`https://fakestoreapi.com/products/${productId}`)
             .then(response => {
                 setProduct(response.data);
             })
@@ -40,22 +41,27 @@ function AdminDashboard() {
     };
 
     const handleUpdateProduct = () => {
-        axios.put(`https://api.escuelajs.co/api/v1/products/${productId}`, updatedProduct)
+        if (updatedProduct.title !== '' && updatedProduct.price !== 0 && updatedProduct.image !== '') {
+          axios.put(`https://fakestoreapi.com/products/${productId}`, updatedProduct)
             .then(response => {
-                setProduct(response.data);
-                setUpdatedProduct({
-                    title: '',
-                    price: 0,
-                    images: []
-                });
+              setProduct(response.data);
+              setUpdatedProduct({
+                title: '',
+                price: 0,
+                image: ''
+              });
+              setShowAlert(true);
             })
             .catch(error => {
-                console.error(error);
+              console.error(error);
             });
-    };
+        } else {
+          console.log('Please fill in all fields');
+        }
+      };
 
     const handleDeleteProduct = () => {
-        axios.delete(`https://api.escuelajs.co/api/v1/products/${productId}`)
+        axios.delete(`https://fakestoreapi.com/products/${productId}`)
             .then(response => {
                 setProduct(null);
             })
@@ -65,32 +71,50 @@ function AdminDashboard() {
     };
 
     const handleAddProduct = () => {
-        axios.post('https://api.escuelajs.co/api/v1/products', newProduct)
+        if (
+          newProduct.title !== '' &&
+          newProduct.price !== 0 &&
+          newProduct.description !== '' &&
+          newProduct.category !== '' &&
+          newProduct.image !== ''
+        ) {
+          axios.post('https://fakestoreapi.com/products', newProduct)
             .then(response => {
-                setNewProduct({
-                    title: '',
-                    price: 0,
-                    images: [],
-                    description: '',
-                    categoryId: 1,
-                });
+              setNewProduct({
+                title: '',
+                price: 0,
+                image: '',
+                description: '',
+                category: "",
+              });
+              setShowAlert(true);
             })
             .catch(error => {
-                console.error(error);
+              console.error(error);
             });
-    };
+        } else {
+          console.log('Please fill in all fields');
+        }
+      };
 
     let imageUrl = "";
     if (product && product.images) {
         imageUrl = product.images[0].replace(/[\[\]""]/g, '');
     }
+    useEffect(() => {
+        if (showAlert) {
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 3000); 
+        }
+      }, [showAlert]);
 
     return (
         <>
             <Breadcrumb />
             <div className="flex h-screen flex-row justify-center">
                 <div className="w-64 bg-gray-500 p-4 shadow-md">
-                    <h2 className="text-2xl font-bold mb-2">{t('Admin Dashboard')}</h2>
+                    <h2 className="text-2xl font-bold mb-2 mt-2">{t('Admin Dashboard')}</h2>
                     <ul>
                         <li>
                             <Link
@@ -189,28 +213,33 @@ function AdminDashboard() {
                                 </label>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">
                                     {t('product_category')}
-                                    <input
-                                        type="number"
+                                    <select
                                         required
-                                        value={newProduct.categoryId}
-                                        onChange={(e) => setNewProduct({ ...newProduct, categoryId: e.target.value })}
+                                        value={newProduct.category}
+                                        onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
                                         className="block w-full p-2 pl-10 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-                                    />
+                                    >
+                                        <option value="">Select a category</option>
+                                        <option value="electronics">Electronics</option>
+                                        <option value="jewelery">Jewelery</option>
+                                        <option value="men's clothing">Men's Clothing</option>
+                                        <option value="women's clothing">Women's Clothing</option>
+                                    </select>
                                 </label>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">
                                     {t('product_image')}
                                     <input
                                         type="text"
                                         required
-                                        value={newProduct.images[0]}
-                                        onChange={(e) => setNewProduct({ ...newProduct, images: [e.target.value] })}
-                                        className="block w-full p-2 pl-10 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
+                                        value={newProduct.image}
+                                        onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+                                        className="block w-full mb-4 p-2 pl-10 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
                                     />
                                 </label>
                                 <Link
                                     to="#"
                                     onClick={handleAddProduct}
-                                    className="bg-green-500 hover:bg-green-700 mt-10 text-white font-bold py-2 px-4 rounded"
+                                    className="bg-green-500 hover:bg-green-700 flex justify-center text-white font-bold py-2 px-4 rounded"
                                 >
                                     {t('add_product')}
                                 </Link>
@@ -237,14 +266,30 @@ function AdminDashboard() {
                             </Link>
                         </form>
                     )}
-
+                    {showAlert && (
+                        <div className="fixed top-11  left-0 right-0 p-4 bg-green-400 shadow-md rounded">
+                            <div className="flex items-center justify-between">
+                                <div className="flex py-3 items-center">
+                                    <svg className="w-8 h-8 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 011 18z" />
+                                    </svg>
+                                    <p className="font-semibold pt-4 text-lg text-white">{t('added_successfully')}</p>
+                                </div>
+                                <button className="text-white pt-4 hover:text-gray-200 transition duration-300" onClick={() => setShowAlert(false)}>
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    )}
                     <div className="flex justify-center mb-4 mt-3 bg-gray-300">
                         {showGetForm == true && product && (
-                            <div className="bg-gray-300 p-4 rounded shadow-md w-1/2 xl:w-1/2 md:w-1/2 sm:w-full">
+                            <div className="bg-gray-100 p-4 rounded shadow-md w-1/2 xl:w-1/2 md:w-1/2 sm:w-full">
                                 <h2 className="text-2xl font-bold mb-2">{t('product_detailes')}</h2>
-                                {imageUrl && (
-                                    <img src={imageUrl} alt="Product Image" className="w-full h-48 pt-2 object-cover rounded-md" />
-                                )}
+                                
+                                    <img src={product.image} alt="Product Image" className="w-full h-48 pt-2 object-contain rounded-md" />
+                            
                                 <p className="text-lg">
                                     {t('product_title')} {product.title}
                                 </p>
@@ -281,8 +326,8 @@ function AdminDashboard() {
                                     <input
                                         type="text"
                                         required
-                                        value={updatedProduct.images[0]}
-                                        onChange={(e) => setUpdatedProduct({ ...updatedProduct, images: [e.target.value] })}
+                                        value={updatedProduct.image}
+                                        onChange={(e) => setUpdatedProduct({ ...updatedProduct, image: e.target.value })}
                                         className="block w-full m-1 mb-4 p-2 px-4 pl-10 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring focus:border-blue-500"
                                     />
                                 </label>
@@ -324,7 +369,7 @@ function AdminDashboard() {
                             </div>
                         </div>
                     )}
-
+                   
 
 
 
